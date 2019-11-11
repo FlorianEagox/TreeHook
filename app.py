@@ -1,15 +1,23 @@
 from flask import Flask
-app = Flask(__name__)
+from bs4 import BeautifulSoup
+import requests
 
-# Make the WSGI interface available at the top level so wfastcgi can get it.
-wsgi_app = app.wsgi_app
+app = Flask(__name__, subdomain_matching=True)
+
+def getPage():
+    return BeautifulSoup(requests.get('https://teamtrees.org').content, 'html.parser')
+
+@app.route('/', subdomain='api')
+def get_trees():
+    page = getPage()
+    treecount = page.select('#totalTrees')[0]['data-count']
+    return treecount
 
 
 @app.route('/')
-def hello():
-    return "Hello World!"
+def index():
+    return 'Home'
 
-if __name__ == '__main__':
-    DEFAULT_HOST = 'localhost'
-    DEFAULT_PORT = 80
-    app.run(DEFAULT_HOST, DEFAULT_PORT)
+
+app.config['SERVER_NAME'] = 'localhost:443'
+app.run()
