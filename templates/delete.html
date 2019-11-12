@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block body %}
+	<h3>Delete an existing webhook</h3>
+	<form method="POST">
+		<label for="token">Token: </label>
+		<input type="text" name="token" id="token"><br>
+		<input type="submit" value="Delete">
+	</form>
+{% endblock %}

@@ -1,52 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-	<title>Beep</title>
-</head>
-<body>
-	<header>
-		<div class="container">
-				<h2 id="title">TreeHook</h2>
-				<nav>
-					<ul>
-						<li><a href="/add">Add</a></li>
-						<li><a href="/remove">Remove</a></li>
-					</ul>
-				</nav>
-		</div>
-	</header>
-	<div id="main" class="container">
-		<p>
-			An app for creating webhooks with the #TeamTrees Charity <br>
-		</p>
-		<p>
-			Automate your applications when someone donates.
-		</p>
-		<h3>API</h3>
-		<p>You can make requests to the following API to get information about the current status of the campaign</p>
-		<div class="code-section">
-			<h4>Get Trees</h4>
-			<code>GET /</code>
-			<p>This will return the current number of trees donated</p>
-		</div>
-		<div class="code-section">
-			<h4>Get Trees</h4>
-			<code>GET /donations</code>
-			<p>This will return a list of donations</p>
-			<p>This takes an query parameter of <code>top</code>. If it's set to <code>True</code>, it will return the top donations rather than the most recent ones.</p>
-			<p>The result will be a JSON array of objects in the format</p>
-			<code class="block">
-				{<br>
-					"name":"MrBeast",<br>
-					"treeCount":100000,<br>
-					"message":"I dare you to take this space from me :)"<br>
-				}<br>
-			</code>
-		</div>
+{% extends "layout.html" %}
+
+{% block body %}
+	<p>
+		An app for creating webhooks with the #TeamTrees Charity <br>
+	</p>
+	<p>
+		Automate your applications when someone donates.
+	</p>
+	<h3>API</h3>
+	<p>You can make requests to the following API to get information about the current status of the campaign</p>
+	<div class="code-section">
+		<h4>Get Trees</h4>
+		<code>GET /</code>
+		<p>This will return the current number of trees donated</p>
 	</div>
-</body>
-</html>
+	<div class="code-section">
+		<h4>Get Trees</h4>
+		<code>GET /donations</code>
+		<p>This will return a list of donations</p>
+		<p>This takes an query parameter of <code>top</code>. If it's set to <code>True</code>, it will return the top donations rather than the most recent ones.</p>
+		<p>The result will be a JSON array of objects in the format</p>
+		<code class="block">
+			{<br>
+				"name":"MrBeast",<br>
+				"treeCount":100000,<br>
+				"message":"I dare you to take this space from me :)"<br>
+			}<br>
+		</code>
+	</div>
+{% endblock %}

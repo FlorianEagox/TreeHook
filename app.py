@@ -45,12 +45,15 @@ def get_donations():
 def create_hook():
     if request.method == 'POST':
         hook = {
-            "url": request.args.get('url'),
-            "delay": int(request.args.get('delay')),
-            "top": request.args.get('top'),
+            "url": request.args['url'],
+            "delay": int(request.args['delay']),
+            "top": request.args['top'],
             "token": token_urlsafe(24),
             "active": True
         }
+        for hook_obj in [hook[0] for hook in hooks]:
+            if hook_obj['url'] == hook['url'] and hook_obj['active'] == hook['active']:
+                return "You already have a hook with this url & method", 403
         thread = threading.Thread(target=hook_thread, args=[hook])
         thread.start()
         hooks.append((hook, thread))
@@ -72,6 +75,19 @@ def create_hook():
 @app.route('/')
 def index():
     return render_template("index.html")
+
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == "POST":
+        print(requests.post(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={"url": request.form['url'], "delay": request.form['delay'], "top": request.form['top']}).text)
+    return render_template("add.html")
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if request.method == "POST":
+        print(requests.delete(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={'token': request.form['token']}).text)
+    return render_template("delete.html")
+
 
 
 def hook_thread(hook):
@@ -97,7 +113,7 @@ def hook_thread(hook):
 
 
 if __name__ == "__main__":
-    app.run()
+    #app.run()
     threading.Thread(target=app.run).start()
     with open('hooks.json') as file:
         for hook in json.load(file):

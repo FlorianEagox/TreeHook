@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+	<h3>Add a new webhook</h3>
+	<form method="POST">
+		<label for="url">Request to: </label>
+		<input type="url" name="url" id="url"><br>
+		<lable for="delay">Delay: </lable>
+		<input type="number" name="delay" id="delay" min="1"><br>
+		<label for="recent">Recent Doners: </label>
+		<input type="radio" name="top" value="False" id="recent">
+		<label for="top">Top Doners: </label>
+		<input type="radio" name="top" value="True" id="top"><br>
+		<input type="submit" value="Submit">
+	</form>
+{% endblock %}
