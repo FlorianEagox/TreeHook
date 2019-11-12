@@ -10,22 +10,24 @@
 	<h3>API</h3>
 	<p>You can make requests to the following API to get information about the current status of the campaign</p>
 	<div class="code-section">
-		<h4>Get Trees</h4>
-		<code>GET /</code>
+		<h4 class="sec-header">Get Trees</h4>
+		<p>
+			<code>GET /</code>
+		</p>
 		<p>This will return the current number of trees donated</p>
 	</div>
 	<div class="code-section">
-		<h4>Get Trees</h4>
-		<code>GET /donations</code>
+		<h4 class="sec-header">Get Donations</h4>
+		<p>
+			<code>GET /donations</code>
+		</p>
 		<p>This will return a list of donations</p>
 		<p>This takes an query parameter of <code>top</code>. If it's set to <code>True</code>, it will return the top donations rather than the most recent ones.</p>
 		<p>The result will be a JSON array of objects in the format</p>
-		<code class="block">
-			{<br>
-				"name":"MrBeast",<br>
-				"treeCount":100000,<br>
-				"message":"I dare you to take this space from me :)"<br>
-			}<br>
-		</code>
+		<pre><code class="block">{
+	"name": "MrBeast",
+	"treeCount": 100000,
+	"message": "I dare you to take this space from me :)"
+}</code></pre>
 	</div>
 {% endblock %}

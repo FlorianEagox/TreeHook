@@ -3,6 +3,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	font-family: Arial, Helvetica, sans-serif;
+	/* border: 1px solid black; */
 }
 header {
 	color: white;
@@ -40,15 +41,57 @@ header nav a {
 	float: center;
 }
 #main p {
-	margin: 0.7em;
+	margin: 0.7em 0;
+}
+.sec-header {
+	margin-bottom: 0.1em;
 }
 code {
 	font-family: 'Courier New', Courier, monospace;
-	background: #ccc;
+	background: #ddd;
 	padding: 0.2em;
+	margin: 0.1em;
 }
 code.block {
 	display:block;
 	width: 100%;
-	margin:0.1em;
+	margin:0.3em;
+	padding: 0.4em;
+	tab-size: 4;
+}
+form {
+	margin: auto;
+	float: left;
+}
+.form-part {
+	margin: 0.7em 0;
+	display: block;
+}
+.form-part label {
+	margin: auto;
+	display: inline-block;
+}
+input[type=url],
+input[type=number],
+input[type=text] {
+	padding: 0.2em;
+	border-radius: 7%;
+	border: 1px solid;
+	float: right;
+	margin-left: 0.5em;
+}
+input[type=number] {
+	width: 4.75em;
+}
+input[type=submit] {
+	color: white;
+	border: none;
+	padding: 0.5em;
+	border-radius: 12%;
+}
+.add {
+	background: green;
+}
+.remove {
+	background: crimson;
 }

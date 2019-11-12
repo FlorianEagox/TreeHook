@@ -3,14 +3,22 @@
 {% block body %}
 	<h3>Add a new webhook</h3>
 	<form method="POST">
-		<label for="url">Request to: </label>
-		<input type="url" name="url" id="url"><br>
-		<lable for="delay">Delay: </lable>
-		<input type="number" name="delay" id="delay" min="1"><br>
-		<label for="recent">Recent Doners: </label>
-		<input type="radio" name="top" value="False" id="recent">
-		<label for="top">Top Doners: </label>
-		<input type="radio" name="top" value="True" id="top"><br>
-		<input type="submit" value="Submit">
+		<div class="form-part">
+			<label for="url">Request to:</label>
+			<input type="url" name="url" id="url" required>
+		</div>
+		<div class="form-part">
+			<label for="delay">Delay:</label>
+			<input type="number" maxlength="5" size="5" name="delay" id="delay" min="1" required>
+		</div>
+		<div class="form-part">
+			<label for="recent">Recent Doners: </label>
+			<input type="radio" name="top" value="False" id="recent" checked>
+			<label for="top">Top Doners: </label>
+			<input type="radio" name="top" value="True" id="top">
+		</div>
+		<div class="form-part">
+			<input type="submit" class="add" value="Submit">
+		</div>
 	</form>
 {% endblock %}
