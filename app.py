@@ -71,7 +71,11 @@ def hook_thread(hook):
             for donation in json.loads(new_donations):
                 if donation not in previous_donations_object:
                     diff.append(donation)
-            requests.get(hook['url'], data=json.dumps(diff))
+            result = {
+                "newDonations": diff,
+                "treeCount": get_trees()
+            }
+            requests.get(hook['url'], data=json.dumps(result))
             previous_donations = new_donations
 
 
