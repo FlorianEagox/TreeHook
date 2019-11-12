@@ -65,7 +65,7 @@ def create_hook():
             write_hooks()
             return "Deleted " + request.args.get('token')
         except:
-            return "Couldn't find token " + request.args.get('token')
+            return "Couldn't find token " + request.args.get('token'), 404
 
 
 
