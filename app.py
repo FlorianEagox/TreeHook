@@ -8,7 +8,7 @@ from secrets import token_urlsafe
 
 app = Flask(__name__, subdomain_matching=True)
 app.config['SERVER_NAME'] = 'localhost:443'
-
+# app.debug = True
 hooks = []
 
 
@@ -71,7 +71,7 @@ def create_hook():
 
 @app.route('/')
 def index():
-    return "Home"
+    return render_template("index.html")
 
 
 def hook_thread(hook):
@@ -97,6 +97,7 @@ def hook_thread(hook):
 
 
 if __name__ == "__main__":
+    app.run()
     threading.Thread(target=app.run).start()
     with open('hooks.json') as file:
         for hook in json.load(file):
