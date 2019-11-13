@@ -4,11 +4,11 @@ import requests
 import json
 import time
 import threading
-from secrets import token_urlsafe
+import secrets
+import sys
 
 app = Flask(__name__, subdomain_matching=True)
-app.config['SERVER_NAME'] = 'localhost:443'
-app.debug = True
+
 hooks = []
 
 
@@ -91,7 +91,6 @@ def delete():
     return render_template("delete.html")
 
 
-
 def hook_thread(hook):
     request_url = f'http://api.{app.config["SERVER_NAME"]}/donations?top={hook["top"]}'
     previous_donations = requests.get(request_url).text
@@ -120,8 +119,13 @@ def hook_thread(hook):
             timer += 1
 
 if __name__ == "__main__":
-    app.run()
-    threading.Thread(target=app.run).start()
+    print(sys.argv[0])
+    app.config['SERVER_NAME'] = sys.argv[1]
+    #app.debug = True
+	
+	#app.run()
+    app_thread = threading.Thread(target=app.run)
+    app_thread.start()
     with open('hooks.json') as file:
         for hook in json.load(file):
             thread = threading.Thread(target=hook_thread, args=[hook])
