@@ -3,7 +3,7 @@
 .vscode/
 obj/
 *.sln
-*.pyproject
+*.pyproj
 *.user
 
 # Byte-compiled / optimized / DLL files
