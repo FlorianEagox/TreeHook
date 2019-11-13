@@ -8,7 +8,7 @@ from secrets import token_urlsafe
 
 app = Flask(__name__, subdomain_matching=True)
 app.config['SERVER_NAME'] = 'localhost:443'
-# app.debug = True
+app.debug = True
 hooks = []
 
 
@@ -66,7 +66,7 @@ def create_hook():
             hooks[index][1].join()
             del hooks[index]
             write_hooks()
-            return "Deleted " + request.args.get('token')
+            return request.args.get('token')
         except:
             return "Couldn't find token " + request.args.get('token'), 404
 
@@ -79,13 +79,15 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == "POST":
-        print(requests.post(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={"url": request.form['url'], "delay": request.form['delay'], "top": request.form['top']}).text)
+        response = requests.post(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={"url": request.form['url'], "delay": request.form['delay'], "top": request.form['top']})
+        return render_template("add.html", result={"status": response.status_code, "text": response.text})
     return render_template("add.html")
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     if request.method == "POST":
-        print(requests.delete(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={'token': request.form['token']}).text)
+        response = requests.delete(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={'token': request.form['token']})
+        return render_template("delete.html", result={"status": response.status_code, "text": response.text})
     return render_template("delete.html")
 
 
@@ -93,27 +95,32 @@ def delete():
 def hook_thread(hook):
     request_url = f'http://api.{app.config["SERVER_NAME"]}/donations?top={hook["top"]}'
     previous_donations = requests.get(request_url).text
+    timer = 0
     while(hook['active']):
-        time.sleep(hook['delay'])
-        new_donations = requests.get(request_url).text
-        
-        print(str(hash(new_donations)) + " " + str(hash(previous_donations)))
-        if not hash(new_donations) == hash(previous_donations):
-            diff = []
-            previous_donations_object = json.loads(previous_donations)
-            for donation in json.loads(new_donations):
-                if donation not in previous_donations_object:
-                    diff.append(donation)
-            result = {
-                "newDonations": diff,
-                "treeCount": get_trees()
-            }
-            requests.get(hook['url'], data=json.dumps(result))
-            previous_donations = new_donations
+        if timer >= hook['delay']:
+            timer = 0
+            new_donations = requests.get(request_url).text
 
+            print(str(hash(new_donations)) + " " + str(hash(previous_donations)))
+            if not hash(new_donations) == hash(previous_donations):
+                diff = []
+                previous_donations_object = json.loads(previous_donations)
+                for donation in json.loads(new_donations):
+                    if donation not in previous_donations_object:
+                        diff.append(donation)
+                result = {
+                    "newDonations": diff,
+                    "treeCount": get_trees()
+                }
+                requests.get(hook['url'], data=json.dumps(result))
+                previous_donations = new_donations
+        else:
+            print("waiting")
+            time.sleep(1)
+            timer += 1
 
 if __name__ == "__main__":
-    #app.run()
+    app.run()
     threading.Thread(target=app.run).start()
     with open('hooks.json') as file:
         for hook in json.load(file):

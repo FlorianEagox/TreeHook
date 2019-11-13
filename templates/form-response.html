@@ -1,0 +1,7 @@
+{% if result is defined %}
+	{% if result.status == 200 %}
+		<div class="response success">{{success}} <span class="token">{{result.text}}</span></div>
+	{% else %}
+		<div class="response failure">Error: {{result.text}}</div>
+	{% endif %}
+{% endif %}

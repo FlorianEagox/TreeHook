@@ -60,8 +60,8 @@ code.block {
 	tab-size: 4;
 }
 form {
-	margin: auto;
-	float: left;
+	margin: auto 0;
+	display: inline-block;
 }
 .form-part {
 	margin: 0.7em 0;
@@ -75,7 +75,7 @@ input[type=url],
 input[type=number],
 input[type=text] {
 	padding: 0.2em;
-	border-radius: 7%;
+	border-radius: 8px;
 	border: 1px solid;
 	float: right;
 	margin-left: 0.5em;
@@ -89,9 +89,18 @@ input[type=submit] {
 	padding: 0.5em;
 	border-radius: 12%;
 }
+.success,
 .add {
 	background: green;
 }
+.failure,
 .remove {
 	background: crimson;
+}
+.response {
+	padding: 0.6em 1em;
+	margin: 0.1em;
+	width: auto;
+	border-radius: 8px;
+	display: inline-block;
 }
