@@ -4,7 +4,7 @@ import requests
 import json
 import time
 import threading
-import secrets
+from secrets import token_urlsafe
 import sys
 
 app = Flask(__name__, subdomain_matching=True)
@@ -119,10 +119,12 @@ def hook_thread(hook):
             timer += 1
 
 if __name__ == "__main__":
+    server_name = 'localhost:5000   '
     if 1 < len(sys.argv):
-        app.config['SERVER_NAME'] = sys.argv[1]
+        server_name = sys.argv[1]
+    app.config['SERVER_NAME'] = server_name
     #app.debug = True
-	
+
 	#app.run()
     app_thread = threading.Thread(target=app.run)
     app_thread.start()
