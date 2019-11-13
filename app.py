@@ -119,8 +119,8 @@ def hook_thread(hook):
             timer += 1
 
 if __name__ == "__main__":
-    print(sys.argv[0])
-    app.config['SERVER_NAME'] = sys.argv[1]
+    if 1 < len(sys.argv):
+        app.config['SERVER_NAME'] = sys.argv[1]
     #app.debug = True
 	
 	#app.run()
