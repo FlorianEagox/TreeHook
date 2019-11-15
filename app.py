@@ -8,6 +8,7 @@ from secrets import token_urlsafe
 import sys
 
 app = Flask(__name__, subdomain_matching=True)
+app.config['SERVER_NAME'] = 'treehookhost:5000'
 
 hooks = []
 
@@ -31,7 +32,7 @@ def get_trees():
 @app.route('/donations', subdomain='api')
 def get_donations():
     page = get_page()
-    donations_tag = page.select(('#top-donations' if bool(request.args.get('top') == 'True') else '#recent-donations') + ' .media')
+    donations_tag = page.select(('#top-donations' if request.args.get('top') and request.args.get('top').lower() == 'true' else '#recent-donations') + ' .media')
     donations = []
     for donation in donations_tag:
         donations.append({
@@ -79,14 +80,14 @@ def index():
 @app.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == "POST":
-        response = requests.post(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={"url": request.form['url'], "delay": request.form['delay'], "top": request.form['top']})
+        response = requests.post(f'http://api.{request.host}/hooks', params={"url": request.form['url'], "delay": request.form['delay'], "top": request.form['top']})
         return render_template("add.html", result={"status": response.status_code, "text": response.text})
     return render_template("add.html")
 
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     if request.method == "POST":
-        response = requests.delete(f'http://api.{app.config["SERVER_NAME"]}/hooks', params={'token': request.form['token']})
+        response = requests.delete(f'http://api.{request.host}/hooks', params={'token': request.form['token']})
         return render_template("delete.html", result={"status": response.status_code, "text": response.text})
     return render_template("delete.html")
 
@@ -119,15 +120,12 @@ def hook_thread(hook):
             timer += 1
 
 if __name__ == "__main__":
-    server_name = 'localhost:5000   '
-    if 1 < len(sys.argv):
-        server_name = sys.argv[1]
-    app.config['SERVER_NAME'] = server_name
     #app.debug = True
-
-	#app.run()
+    
+    #app.run()
     app_thread = threading.Thread(target=app.run)
     app_thread.start()
+
     with open('hooks.json') as file:
         for hook in json.load(file):
             thread = threading.Thread(target=hook_thread, args=[hook])
